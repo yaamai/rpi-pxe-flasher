@@ -45,7 +45,7 @@ ENTRYPOINT ["/tini", "--", "/entrypoint.sh"]
 
 WORKDIR /pxe
 RUN mkdir -p /pxe /pxe/tftpboot /pxe/http &&\
-    apk add --update dnsmasq python3 bash
+    apk add --update dnsmasq python3 bash openssh-client
 COPY --from=builder /work/tftpboot /pxe/tftpboot
 COPY --from=builder /work/http /pxe/http
-COPY entrypoint.sh /
+COPY entrypoint.sh hook-dhcp.sh /

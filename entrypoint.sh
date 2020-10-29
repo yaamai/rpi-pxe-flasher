@@ -27,6 +27,7 @@ main() {
     -z \
     -i $interface \
     -F $subnet \
+    --dhcp-script /hook-dhcp.sh \
     --enable-tftp \
     --tftp-root=$PWD/tftpboot/alpine \
     --pxe-service=0,"Raspberry Pi Boot" &

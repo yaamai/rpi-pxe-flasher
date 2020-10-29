@@ -8,11 +8,10 @@ Raspberry Pi 4 image flasher using PXE.
 
 ## How to use
 ```
-# docker run --privileged --net host --rm -it -e PXE_INTF=eth1 -e PXE_SUBNET=10.101.101.100,10.101.101.150 yaamai/rpi-pxe-flasher:latest
+# docker run --privileged --net host --rm -it -e PXE_INTF=eth1 yaamai/rpi-pxe-flasher:latest
 # ubuntu/flash_ubuntu20.sh root@10.101.101.xxx
 ```
 
 ## Todo
-1. fully automated image flash (using dnsmasq's hook script)
-2. add pxe config procedure
-3. add vlan config script (gs308e)
+1. add pxe config procedure
+2. add vlan config script (gs308e)
