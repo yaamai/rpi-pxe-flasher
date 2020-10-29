@@ -25,16 +25,17 @@ RUN cd overlay &&\
     tar zcf overlay.tar.gz etc/
 
 # Generate tftpboot dir
-RUN mkdir tftpboot &&\
-    cd tftpboot &&\
+RUN mkdir -p tftpboot/alpine &&\
+    cd tftpboot/alpine &&\
     tar xf ${ALPINE_TAR} &&\
     rm -rf apks &&\
     cp /work/initramfs/initramfs-rpi4-netboot boot/initramfs-rpi4
 
 # Generate http dir
-RUN tar xf ${ALPINE_TAR} ./apks  &&\
-    mv apks http &&\
-    cp /work/overlay/overlay.tar.gz http/overlay.tar.gz
+RUN mkdir -p http/alpine &&\
+    tar xf ${ALPINE_TAR} ./apks  &&\
+    mv apks/* http/alpine &&\
+    cp /work/overlay/overlay.tar.gz http/alpine/overlay.tar.gz
 
 FROM alpine
 ENV TINI_VERSION v0.19.0

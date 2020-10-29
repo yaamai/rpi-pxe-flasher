@@ -14,7 +14,5 @@ Raspberry Pi 4 image flasher using PXE.
 
 ## Todo
 1. fully automated image flash (using dnsmasq's hook script)
-2. configurable network addresses via env
-3. auto interface configuration (up/down, assign address)
-4. add pxe config procedure
-5. add vlan config script (gs308e)
+2. add pxe config procedure
+3. add vlan config script (gs308e)
