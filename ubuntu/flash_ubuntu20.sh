@@ -113,4 +113,12 @@ tweak_ubuntu20_usbboot() {
   ssh $target 'chmod +x /mnt/boot/auto_decompress_kernel /mnt/etc/apt/apt.conf.d/999_decompress_rpi_kernel'
 }
 
+tweak_ubuntu20_multipathd_longhorn() {
+  local target=$1
+  ssh $target '
+    sed -e "/blacklist/,/}/d" -i /mnt/etc/multipath.conf
+    echo -e "blacklist {\n    devnode \"^sd[a-z0-9]+\"\n}" >> /mnt/etc/multipath.conf
+  '
+}
+
 main "$@"
