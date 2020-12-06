@@ -4,7 +4,6 @@ set -x
 
 cleanup() {
   ip addr del dev $interface $server_ip/$server_prefix_len || true
-  ip link set dev $interface down || true
 }
 
 main() {
