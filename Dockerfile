@@ -35,6 +35,16 @@ RUN mkdir -p tftpboot/alpine &&\
 RUN mkdir -p http/alpine &&\
     tar xf ${ALPINE_TAR} ./apks  &&\
     mv apks/* http/alpine &&\
+    cd http/alpine/aarch64 &&\
+    T1=$(mktemp -d) &&\
+    T2=$(mktemp -d) &&\
+    cd $T2 &&\
+    apk fetch -R --url cryptsetup -o $T1 2>&1 | grep '^https://' | sed 's:x86_64:aarch64:g' | xargs wget &&\
+    rm -r $T1 &&\
+    cd - &&\
+    mv $T2/*.apk . &&\
+    apk index --allow-untrusted -o APKINDEX.tar.gz ./*.apk &&\
+    cd ../../../ &&\
     cp /work/overlay/overlay.tar.gz http/alpine/overlay.tar.gz
 
 
