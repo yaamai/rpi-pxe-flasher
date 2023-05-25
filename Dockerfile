@@ -39,11 +39,12 @@ RUN mkdir -p http/alpine &&\
     T1=$(mktemp -d) &&\
     T2=$(mktemp -d) &&\
     cd $T2 &&\
-    apk fetch -R --url cryptsetup -o $T1 2>&1 | grep '^https://' | sed 's:x86_64:aarch64:g' | xargs wget &&\
+    apk fetch -R --url cryptsetup apk-tools cryptsetup-openrc libcap -o $T1 2>&1 | grep '^https://' | sed 's:x86_64:aarch64:g' | xargs wget &&\
     rm -r $T1 &&\
     cd - &&\
     mv $T2/*.apk . &&\
-    apk index --allow-untrusted -o APKINDEX.tar.gz ./*.apk &&\
+    rm APKINDEX.tar.gz &&\
+    wget https://dl-cdn.alpinelinux.org/alpine/v3.18/main/aarch64/APKINDEX.tar.gz &&\
     cd ../../../ &&\
     cp /work/overlay/overlay.tar.gz http/alpine/overlay.tar.gz
 

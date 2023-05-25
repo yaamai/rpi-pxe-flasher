@@ -1,2 +1,4 @@
 alpine-base
 openssh
+e2fsprogs
+cryptsetup
