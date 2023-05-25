@@ -1,6 +1,6 @@
-FROM alpine AS builder
+FROM alpine:3.18.0 AS builder
 
-ARG ALPINE_URL=http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/aarch64/alpine-rpi-3.12.1-aarch64.tar.gz
+ARG ALPINE_URL=https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/aarch64/alpine-rpi-3.18.0-aarch64.tar.gz
 ENV ALPINE_TAR=/work/alpine.tar.gz
 
 # download alpien release tar
@@ -37,7 +37,8 @@ RUN mkdir -p http/alpine &&\
     mv apks/* http/alpine &&\
     cp /work/overlay/overlay.tar.gz http/alpine/overlay.tar.gz
 
-FROM alpine
+
+FROM alpine:3.18.0
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini
 RUN chmod +x /tini
