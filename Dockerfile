@@ -15,7 +15,9 @@ RUN apk add --update squashfs-tools &&\
     mkdir -p initramfs/modloop-rpi4 &&\
     cd initramfs &&\
     tar xf ../alpine.tar.gz ./boot/modloop-rpi4 ./boot/initramfs-rpi4 &&\
-    unsquashfs -d modloop-rpi4/lib boot/modloop-rpi4  'modules/*/modules.*' 'modules/*/kernel/net/packet/af_packet.ko' &&\
+    ls -alR . &&\
+    unsquashfs -d modloop-rpi4/lib boot/modloop-rpi4 'modules/*/modules.*' 'modules/*/kernel/net/packet/af_packet.ko' 'modules/*/kernel/drivers/md/*' 'modules/*/kernel/crypto/*' 'modules/*/kernel/lib/crypto/libaes.ko' 'modules/*/kernel/security/keys/encrypted-keys/*' &&\
+    ls -alR . &&\
     (cd modloop-rpi4 && find . | cpio -H newc -ov | gzip) > initramfs-ext-rpi4 &&\
     cat boot/initramfs-rpi4 initramfs-ext-rpi4 > initramfs-rpi4-netboot
 

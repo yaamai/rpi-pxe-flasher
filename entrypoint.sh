@@ -18,7 +18,7 @@ main() {
   ip addr add dev $interface $server_ip/$server_prefix_len || true
   ip link set dev $interface up || true
 
-  echo "ip=dhcp modules=loop,dhcp,network alpine_repo=$server_url/alpine apkovl=$server_url/alpine/overlay.tar.gz" > $PWD/tftpboot/alpine/cmdline.txt
+  echo "ip=dhcp modules=loop,dhcp,network,dm-mod,libaes,aes-generic,encrypted-keys,crypto-user,dm-crypt alpine_repo=$server_url/alpine apkovl=$server_url/alpine/overlay.tar.gz" > $PWD/tftpboot/alpine/cmdline.txt
 
   dnsmasq \
     -d \
