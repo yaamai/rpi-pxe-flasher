@@ -1,14 +1,15 @@
+#!/bin/ash
 
 main() {
   local dev="/dev/sda"
   local crypt_root_name="cryptroot"
   local crypt_password="password"
   local mnt_to="/mnt"
-  local material_server="http://10.101.101.1:8000/user"
+  local material_server="http://10.101.101.1:8000/user/scripts/ubuntu-22.04-luks"
   local fs_tar_url="${material_server}/ubuntu-22.04.2-preinstalled-server-arm64%2Braspi.tar.gz"
   local ssh_pubkey_url="${material_server}/id_rsa.pub"
-  local pkgs_url="${material_server}/list.txt"
-  local pkgs_base_url="${material_server}"
+  local pkgs_url="${material_server}/pkgs/list.txt"
+  local pkgs_base_url="${material_server}/pkgs"
 
   modify_partition_table ${dev}
   prepare_partitions ${dev} ${crypt_root_name} ${mnt_to} ${crypt_password}
