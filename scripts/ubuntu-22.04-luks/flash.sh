@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/ash -x
 
 main() {
   local dev="/dev/sda"
@@ -16,7 +16,7 @@ main() {
   flash_ubuntu_with_tar ${fs_tar_url} ${mnt_to}
   prepare_luks_config ${dev} ${crypt_root_name} ${mnt_to} ${ssh_pubkey_url}
   generate_luks_initramfs ${mnt_to} ${pkgs_url} ${pkgs_base_url}
-  umount_devices ${mnt_to}
+  umount_devices ${mnt_to} ${crypt_root_name}
 }
 
 modify_partition_table() {
@@ -99,7 +99,7 @@ prepare_luks_config() {
   sed -E 's;root=[^ ]+;root='${root_crypt_dev}';' -i ${cmdline}
   sed -E 's;\s?splash\s?;;' -i ${cmdline}
 
-  echo "${root_crypt_dev} / ext4 discard,errors=remount-ro 0 1" >> ${mnt_to}/etc/fstab
+  echo "${root_crypt_dev} / ext4 discard,errors=remount-ro 0 1" > ${mnt_to}/etc/fstab
   echo "UUID=${firmware_uuid} /boot/firmware vfat defaults 0 1" >> ${mnt_to}/etc/fstab
 }
 
@@ -128,15 +128,21 @@ generate_luks_initramfs() {
 
   umount ${mnt_to}/proc
   umount ${mnt_to}/sys
-  umount ${mnt_to}/dev
   umount ${mnt_to}/dev/pts
+  umount ${mnt_to}/dev
   umount ${mnt_to}/run
 }
 
 umount_devices() {
   local mnt_to=$1
+  local crypt_root_name=$2
+
+  local root_crypt_dev=/dev/mapper/${crypt_root_name}
+
   umount ${mnt_to}/boot/firmware
   umount ${mnt_to}
+  cryptsetup close ${root_crypt_dev}
+
   sync; sync; sync
 }
 
