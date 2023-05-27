@@ -58,7 +58,7 @@ prepare_partitions() {
   echo -n "${pass}" | cryptsetup luksFormat --cipher aes-xts-plain64 --key-size 256 --hash sha256 --use-random ${root_dev} -
   echo -n "${pass}" | cryptsetup open ${root_dev} ${crypt_root_name}
 
-  mkfs.vfat ${firmware_dev}
+  mkfs.vfat -n system-boot ${firmware_dev}
   mkfs.ext4 ${root_crypt_dev}
 
   # WA for old ubuntu fsck
@@ -82,8 +82,8 @@ prepare_luks_config() {
   local ssh_pubkey_url=$4
 
   local root_crypt_dev=/dev/mapper/${crypt_root_name}
-  local root_uuid=$(blkid ${dev}2 | awk -F\" '{print $2}')
-  local firmware_uuid=$(blkid ${dev}1 | awk -F\" '{print $2}')
+  local root_uuid=$(blkid ${dev}2 | grep -Eo 'UUID=[^ ]+' | awk -F\" '{print $2}')
+  local firmware_uuid=$(blkid ${dev}1 | grep -Eo 'UUID=[^ ]+' | awk -F\" '{print $2}')
   local ssh_pubkey=$(wget -q "${ssh_pubkey_url}" -O -)
 
   echo "${crypt_root_name} UUID=${root_uuid} none luks,discard" > ${mnt_to}/etc/crypttab
@@ -139,11 +139,11 @@ umount_devices() {
 
   local root_crypt_dev=/dev/mapper/${crypt_root_name}
 
+  sync; sync; sync
   umount ${mnt_to}/boot/firmware
+  # TODO: fix umount busy while timeout -k 1 1 umount /mnt; [ $? != 0 ]; do sleep 1; done
   umount ${mnt_to}
   cryptsetup close ${root_crypt_dev}
-
-  sync; sync; sync
 }
 
 main
